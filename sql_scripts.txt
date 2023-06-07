@@ -1,0 +1,50 @@
+# Запуск PostgreSQL
+su postgres
+createuser --interactive -P daniil
+Enter password for new role: 1234
+Shall the new role to be a superuser? (y/n) y
+
+createdb -O daniil serverdb
+psql -U daniil -h 127.0.0.1 serverdb
+
+
+# Команды формирования базы данных
+CREATE DATABASE DBUsers;
+CREATE TABLE Users (
+	Id SERIAL,
+	Login CHARACTER VARYING(30) NOT NULL,
+	Password CHARACTER VARYING(60) NOT NULL,
+	Balance INTEGER NOT NULL DEFAULT 0,
+	
+	CONSTRAINT users_id_key PRIMARY KEY(Id),
+	CONSTRAINT users_login_key UNIQUE(Login),
+	CONSTRAINT users_login_check CHECK(Login != ''),
+	CONSTRAINT users_password_check CHECK(Password != ''),
+	CONSTRAINT users_balance_check CHECK(Balance >= 0)
+);
+	
+CREATE TABLE Operations (
+	OperId SERIAL,
+	Login CHARACTER VARYING(30) NOT NULL,
+	Balance INTEGER NOT NULL DEFAULT 0,
+	ExecuteTime TIMESTAMP,
+	Expression CHARACTER VARYING(128),
+	Result REAL,
+	
+	CONSTRAINT operations_id_key PRIMARY KEY(OperId),
+	CONSTRAINT operations_login_check CHECK(Login != ''),
+	CONSTRAINT operations_balance_check CHECK(Balance >= 0)
+);
+
+# Заполнение таблицы Users
+INSERT INTO Users VALUES (1, 'user1', '1234', 1000);
+INSERT INTO Users VALUES (2, 'user2', '1234', 100);
+INSERT INTO Users VALUES (3, 'user3', '1234', 100);
+INSERT INTO Users VALUES (4, 'user4', '1234', 100000);
+INSERT INTO Users VALUES (5, 'user5', '1234', 100000);
+INSERT INTO Users VALUES (6, 'user6', '1234', 100000);
+INSERT INTO Users VALUES (7, 'user7', '1234', 100000);
+INSERT INTO Users VALUES (8, 'user8', '1234', 100000);
+INSERT INTO Users VALUES (9, 'user9', '1234', 1000000);
+
+
